@@ -116,6 +116,7 @@ def main(predict_config: OmegaConf):
         flops = count_flops(model, input_tensor)
         print(f" total flops = {flops}")
         print(flops)
+        print("123123test")
         # ------------------ add by myself ------------------ #
     
     except KeyboardInterrupt:
