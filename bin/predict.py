@@ -57,6 +57,27 @@ def main(predict_config: OmegaConf):
                                        predict_config.model.checkpoint)
         model = load_checkpoint(train_config, checkpoint_path, strict=False, map_location='cpu')
         model.freeze()
+
+        # ------------------ add by myself ------------------ #
+        from fvcore.nn import FlopCountAnalysis
+        
+        def count_parameters(model):
+            return sum(p.numel() for p in model.parameters())
+
+        num_parameter = count_parameters(model)
+        print(f" total parameters = {num_parameter} ")
+
+        def count_flops(model, input_tensor):
+            flops = FlopCountAnalysis(model, input_tensor)
+            return flops.total()
+
+        input_tensor = torch.randn(1, 1, 224, 224)  # 根据模型的输入大小进行调整
+
+        # 计算 FLOPs
+        flops = count_flops(model, input_tensor)
+        print(f" total flops = {flops}")
+        # ------------------ add by myself ------------------ #
+        
         if not predict_config.get('refine', False):
             model.to(device)
 
