@@ -96,25 +96,27 @@ def main(predict_config: OmegaConf):
             cur_res = cv2.cvtColor(cur_res, cv2.COLOR_RGB2BGR)
             cv2.imwrite(cur_out_fname, cur_res)
 
-    # ------------------ add by myself ------------------ #
-    from fvcore.nn import FlopCountAnalysis
+        # ------------------ add by myself ------------------ #
+        from fvcore.nn import FlopCountAnalysis
+        
+        def count_parameters(model):
+            return sum(p.numel() for p in model.parameters())
     
-    def count_parameters(model):
-        return sum(p.numel() for p in model.parameters())
-
-    num_parameter = count_parameters(model)
-    print(f" total parameters = {num_parameter} ")
-
-    def count_flops(model, input_tensor):
-        flops = FlopCountAnalysis(model, input_tensor)
-        return flops.total()
-
-    input_tensor = torch.randn(1, 1, 224, 224)  # 根据模型的输入大小进行调整
-
-    # 计算 FLOPs
-    flops = count_flops(model, input_tensor)
-    print(f" total flops = {flops}")
-    # ------------------ add by myself ------------------ #
+        num_parameter = count_parameters(model)
+        print("total parameters = " ,num_parameter)
+        print(f" total parameters = {num_parameter} ")
+    
+        def count_flops(model, input_tensor):
+            flops = FlopCountAnalysis(model, input_tensor)
+            return flops.total()
+    
+        input_tensor = torch.randn(1, 1, 224, 224)  # 根据模型的输入大小进行调整
+    
+        # 计算 FLOPs
+        flops = count_flops(model, input_tensor)
+        print(f" total flops = {flops}")
+        print("total flops = ",flops)
+        # ------------------ add by myself ------------------ #
     
     except KeyboardInterrupt:
         LOGGER.warning('Interrupted by user')
