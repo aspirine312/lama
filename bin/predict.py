@@ -103,7 +103,7 @@ def main(predict_config: OmegaConf):
             return sum(p.numel() for p in model.parameters())
     
         num_parameter = count_parameters(model)
-        print("total parameters = " ,num_parameter)
+        print(num_parameter)
         print(f" total parameters = {num_parameter} ")
     
         def count_flops(model, input_tensor):
@@ -115,7 +115,7 @@ def main(predict_config: OmegaConf):
         # 计算 FLOPs
         flops = count_flops(model, input_tensor)
         print(f" total flops = {flops}")
-        print("total flops = ",flops)
+        print(flops)
         # ------------------ add by myself ------------------ #
     
     except KeyboardInterrupt:
